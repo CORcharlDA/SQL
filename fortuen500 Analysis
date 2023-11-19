@@ -1,0 +1,49 @@
+Select *
+from fortune_companies
+
+#industry with greatest amount of total days off
+SELECT industry, sum(paid_time_off_days+(maternity_leave_weeks/7)) AS tot_time_off
+from fortune_companies
+Group BY industry 
+Order by tot_time_off desc
+
+SELECT
+company_name,
+CASE 
+  WHEN maternity_leave_weeks >= 10 THEN 'mother friendly workplace'
+  WHEN maternity_leave_weeks >= 8 THEN 'acceptable'
+  ELSE 'abysmal'
+END as mother_friendliness
+FROM fortune_companies
+WHERE industry='Healthcare'
+;
+
+
+#USING a CASE statement analyze Family friendly work place status
+SELECT 
+  company_name,
+  CASE 
+    WHEN maternity_leave_weeks >= 12 THEN 'Family Friendly Work Place'
+    WHEN maternity_leave_weeks <= 8 THEN 'Some Leave Provided'
+    ELSE 'Not Recommended for Young Families'
+  END AS family_friendliness
+FROM fortune_companies;
+
+#Determine something about the data using the HAVING clause
+SELECT industry, ROUND(AVG(revenue),1) as avg_revenue_billions
+FROM fortune_companies
+GROUP BY industry
+HAVING avg_revenue_billions>=200
+
+#Companies that have Healthcare benefits AND at least 20 days off
+  SELECT company_name
+FROM fortune_companies
+WHERE paid_time_off_days>20
+AND healthcare_benefits=1;
+
+# Which company in the Telecommunications industry has the least revenue, and what's their revenue? 
+SELECT company_name, min(revenue)
+FROM fortune_companies
+WHERE industry = 'Telecommunications'
+;
+
